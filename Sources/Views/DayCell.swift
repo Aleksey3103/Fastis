@@ -353,7 +353,7 @@ public extension FastisConfig {
 
          Default value — `.systemBlue`
          */
-        public var selectedBackgroundColor: UIColor = .systemBlue
+        public var selectedBackgroundColor: UIColor = .systemGreen
 
         /**
          Color of date label in cell when date is selected
