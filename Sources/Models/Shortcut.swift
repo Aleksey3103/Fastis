@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /**
  Using shortcuts allows you to quick select prepared dates or date ranges.
@@ -89,6 +90,14 @@ public extension FastisShortcut where Value == FastisRange {
         FastisShortcut(name: "Last month") {
             let now = Date()
             let monthAgo = Calendar.current.date(byAdding: .month, value: -1, to: now)!
+            return FastisRange(from: monthAgo.startOfDay(), to: now.endOfDay())
+        }
+    }
+    
+    static var allMonth: FastisShortcut {
+        FastisShortcut(name: "Last Year") {
+            let now = Date()
+            let monthAgo = Calendar.current.date(byAdding: .year, value: -1, to: now)!
             return FastisRange(from: monthAgo.startOfDay(), to: now.endOfDay())
         }
     }

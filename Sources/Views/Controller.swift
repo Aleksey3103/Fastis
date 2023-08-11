@@ -263,6 +263,12 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
         self.configureSubviews()
         self.configureConstraints()
         self.configureInitialState()
+        
+        currentValueView.completion = { [weak self] value in
+            guard let self = self else { return }
+            self.value = value
+            self.selectValue(value, in: self.calendarView)
+        }
     }
 
     /**
@@ -340,25 +346,25 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
             NSLayoutConstraint.activate([
                 self.calendarView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
+            
         }
     }
 
     private func configureInitialState() {
-        self.value = self.initialValue
-        if let date = self.value as? Date {
-            self.calendarView.selectDates([date])
-            self.calendarView.scrollToHeaderForDate(date)
-        } else if let rangeValue = self.value as? FastisRange {
-            self.selectRange(rangeValue, in: self.calendarView)
-            self.calendarView.scrollToHeaderForDate(rangeValue.fromDate)
+        if let initialValue = self.initialValue {
+            self.value = initialValue
+            if let date = initialValue as? Date {
+                self.calendarView.selectDates([date])
+                self.calendarView.scrollToHeaderForDate(date)
+            } else if let rangeValue = initialValue as? FastisRange {
+                self.selectRange(rangeValue, in: self.calendarView)
+                self.calendarView.scrollToHeaderForDate(rangeValue.fromDate)
+            }
         } else {
             let nowDate = Date()
-            let targetDate = self.privateMaximumDate ?? nowDate
-            if targetDate < nowDate {
-                self.calendarView.scrollToHeaderForDate(targetDate)
-            } else {
-                self.calendarView.scrollToHeaderForDate(Date())
-            }
+            self.value = nowDate as? Value // Set today's date as the initial value
+            self.calendarView.selectDates([nowDate])
+            self.calendarView.scrollToHeaderForDate(nowDate)
         }
     }
 
@@ -390,6 +396,7 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
     private func updateSelectedShortcut() {
         guard !self.shortcuts.isEmpty else { return }
         if let value = self.value {
+            self.currentValueView.updateDatePickersWithSelectedRange(dateFastis: value as! FastisRange)
             self.shortcutContainerView.selectedShortcut = self.shortcuts.first(where: { $0.isEqual(to: value) })
         } else {
             self.shortcutContainerView.selectedShortcut = nil
@@ -446,16 +453,14 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
                     let newToDate = date.endOfDay(in: self.config.calendar)
                     newValue = .from(currentValue.fromDate, to: newToDate)
                 }
-
             } else {
                 newValue = .from(date.startOfDay(in: self.config.calendar), to: date.endOfDay(in: self.config.calendar))
             }
 
             self.value = newValue as? Value
             self.selectValue(newValue as? Value, in: calendar)
-
+            self.currentValueView.updateDatePickersWithSelectedRange(dateFastis: newValue)
         }
-
     }
 
     private func selectRange(_ range: FastisRange, in calendar: JTACMonthView) {
@@ -540,6 +545,9 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
                 let newValue: FastisRange = .from(fromDate, to: toDate)
                 self.value = newValue as? Value
                 self.selectRange(newValue, in: calendar)
+                self.currentValueView.completion = { [weak self] value in
+                    self?.selectValue(value, in: calendar)
+                }
             }
         }
         return header
@@ -548,6 +556,7 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
     public func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell {
         let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: self.dayCellReuseIdentifier, for: indexPath)
         self.configureCell(cell, forItemAt: date, cellState: cellState, indexPath: indexPath)
+        
         return cell
     }
 
