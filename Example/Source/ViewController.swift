@@ -71,7 +71,7 @@ class ViewController: UIViewController {
     // MARK: - Configuration
 
     private func configureUI() {
-        self.view.backgroundColor = .yellow
+        self.view.backgroundColor = .systemBackground
         self.navigationItem.title = "Fastis demo"
         self.navigationItem.largeTitleDisplayMode = .always
         self.currentValue = nil
