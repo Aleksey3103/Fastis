@@ -266,8 +266,10 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
         
         currentValueView.completion = { [weak self] value in
             guard let self = self else { return }
+            guard let date = value as? FastisRange else { return }
             self.value = value
             self.selectValue(value, in: self.calendarView)
+            self.calendarView.scrollToHeaderForDate(date.fromDate)
         }
     }
 
@@ -351,6 +353,7 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
     }
 
     private func configureInitialState() {
+        self.initialValue = nil
         if let initialValue = self.initialValue {
             self.value = initialValue
             if let date = initialValue as? Date {
@@ -398,6 +401,8 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
         if let value = self.value {
             self.currentValueView.updateDatePickersWithSelectedRange(dateFastis: value as! FastisRange)
             self.shortcutContainerView.selectedShortcut = self.shortcuts.first(where: { $0.isEqual(to: value) })
+            guard let rangeValue = value as? FastisRange else { return }
+            self.calendarView.scrollToHeaderForDate(rangeValue.fromDate)
         } else {
             self.shortcutContainerView.selectedShortcut = nil
         }
