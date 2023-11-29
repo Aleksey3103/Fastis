@@ -67,40 +67,47 @@ public struct FastisShortcut<Value: FastisValue>: Hashable {
 }
 
 public extension FastisShortcut where Value == FastisRange {
-
-    /// Range: from **`now.startOfDay`** to **`now.endOfDay`**
-    static var today: FastisShortcut {
-        FastisShortcut(name: "Today") {
+    
+    static var done: FastisShortcut {
+        FastisShortcut(name: "Застосувати") {
             let now = Date()
             return FastisRange(from: now.startOfDay(), to: now.endOfDay())
         }
     }
 
-    /// Range: from **`now.startOfDay - 7 days`** to **`now.endOfDay`**
-    static var lastWeek: FastisShortcut {
-        FastisShortcut(name: "Last week") {
-            let now = Date()
-            let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now)!
-            return FastisRange(from: weekAgo.startOfDay(), to: now.endOfDay())
-        }
-    }
-
-    /// Range: from **`now.startOfDay - 1 month`** to **`now.endOfDay`**
-    static var lastMonth: FastisShortcut {
-        FastisShortcut(name: "Last month") {
-            let now = Date()
-            let monthAgo = Calendar.current.date(byAdding: .month, value: -1, to: now)!
-            return FastisRange(from: monthAgo.startOfDay(), to: now.endOfDay())
-        }
-    }
-    
-    static var allMonth: FastisShortcut {
-        FastisShortcut(name: "Last Year") {
-            let now = Date()
-            let monthAgo = Calendar.current.date(byAdding: .year, value: -1, to: now)!
-            return FastisRange(from: monthAgo.startOfDay(), to: now.endOfDay())
-        }
-    }
+//    /// Range: from **`now.startOfDay`** to **`now.endOfDay`**
+//    static var today: FastisShortcut {
+//        FastisShortcut(name: "Today") {
+//            let now = Date()
+//            return FastisRange(from: now.startOfDay(), to: now.endOfDay())
+//        }
+//    }
+//
+//    /// Range: from **`now.startOfDay - 7 days`** to **`now.endOfDay`**
+//    static var lastWeek: FastisShortcut {
+//        FastisShortcut(name: "Last week") {
+//            let now = Date()
+//            let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now)!
+//            return FastisRange(from: weekAgo.startOfDay(), to: now.endOfDay())
+//        }
+//    }
+//
+//    /// Range: from **`now.startOfDay - 1 month`** to **`now.endOfDay`**
+//    static var lastMonth: FastisShortcut {
+//        FastisShortcut(name: "Last month") {
+//            let now = Date()
+//            let monthAgo = Calendar.current.date(byAdding: .month, value: -1, to: now)!
+//            return FastisRange(from: monthAgo.startOfDay(), to: now.endOfDay())
+//        }
+//    }
+//    
+//    static var allMonth: FastisShortcut {
+//        FastisShortcut(name: "Last Year") {
+//            let now = Date()
+//            let monthAgo = Calendar.current.date(byAdding: .year, value: -1, to: now)!
+//            return FastisRange(from: monthAgo.startOfDay(), to: now.endOfDay())
+//        }
+//    }
 
 }
 

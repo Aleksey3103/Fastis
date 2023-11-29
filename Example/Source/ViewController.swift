@@ -101,14 +101,20 @@ class ViewController: UIViewController {
     @objc
     private func chooseRange() {
         let fastisController = FastisController(mode: .range)
-        fastisController.title = "Choose range"
+        fastisController.title = ""
         fastisController.initialValue = self.currentValue as? FastisRange
         fastisController.minimumDate = Calendar.current.date(byAdding: .month, value: -50, to: Date())
         fastisController.maximumDate = Date()
         fastisController.allowToChooseNilDate = true
-        fastisController.shortcuts = [.today, .lastWeek, .lastMonth]
+        
+        fastisController.shortcuts = [.done]
         fastisController.doneHandler = { [weak self] newValue in
-            self?.currentValue = newValue
+            if newValue == nil {
+                self?.currentValue = newValue
+            } else {
+                self?.currentValue = newValue
+            }
+           
         }
         fastisController.present(above: self)
     }

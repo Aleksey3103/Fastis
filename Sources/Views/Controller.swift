@@ -51,40 +51,46 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
 
     // MARK: - Outlets
 
-    private lazy var cancelBarButtonItem: UIBarButtonItem = {
-        if let customButton = self.appearance.customCancelButton {
-            customButton.target = self
-            customButton.action = #selector(self.cancel)
-            return customButton
-        }
-
-        let barButtonItem = UIBarButtonItem(
-            title: self.appearance.cancelButtonTitle,
-            style: .plain,
-            target: self,
-            action: #selector(self.cancel)
-        )
-        barButtonItem.tintColor = self.appearance.barButtonItemsColor
-        return barButtonItem
+//    private lazy var cancelBarButtonItem: UIBarButtonItem = {
+//        if let customButton = self.appearance.customCancelButton {
+//            customButton.target = self
+//            customButton.action = #selector(self.cancel)
+//            return customButton
+//        }
+//
+//        let barButtonItem = UIBarButtonItem(
+//            title: self.appearance.cancelButtonTitle,
+//            style: .plain,
+//            target: self,
+//            action: #selector(self.cancel)
+//        )
+//        barButtonItem.tintColor = self.appearance.barButtonItemsColor
+//        return barButtonItem
+//    }()
+    private var emptyView: UIView = {
+       
+        let vw = UIView()
+        vw.backgroundColor = .orange
+        return vw
     }()
 
-    private lazy var doneBarButtonItem: UIBarButtonItem = {
-        if let customButton = self.appearance.customDoneButton {
-            customButton.target = self
-            customButton.action = #selector(self.done)
-            return customButton
-        }
-
-        let barButtonItem = UIBarButtonItem(
-            title: self.appearance.doneButtonTitle,
-            style: .done,
-            target: self,
-            action: #selector(self.done)
-        )
-        barButtonItem.tintColor = self.appearance.barButtonItemsColor
-        barButtonItem.isEnabled = self.allowToChooseNilDate
-        return barButtonItem
-    }()
+//    private lazy var doneBarButtonItem: UIBarButtonItem = {
+//        if let customButton = self.appearance.customDoneButton {
+//            customButton.target = self
+//            customButton.action = #selector(self.done)
+//            return customButton
+//        }
+//
+//        let barButtonItem = UIBarButtonItem(
+//            title: self.appearance.doneButtonTitle,
+//            style: .done,
+//            target: self,
+//            action: #selector(self.done)
+//        )
+//        barButtonItem.tintColor = self.appearance.barButtonItemsColor
+//        barButtonItem.isEnabled = self.allowToChooseNilDate
+//        return barButtonItem
+//    }()
 
     private lazy var calendarView: JTACMonthView = {
         let monthView = JTACMonthView()
@@ -133,6 +139,7 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
             itemConfig: self.config.shortcutItemView,
             shortcuts: self.shortcuts
         )
+//        view.backgroundColor = .red
         view.translatesAutoresizingMaskIntoConstraints = false
         if let value = self.value {
             view.selectedShortcut = self.shortcuts.first(where: { $0.isEqual(to: value) })
@@ -147,6 +154,7 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
         }
         return view
     }()
+    
 
     // MARK: - Variables
 
@@ -163,9 +171,10 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
         didSet {
             self.updateSelectedShortcut()
             self.currentValueView.currentValue = self.value
-            self.doneBarButtonItem.isEnabled = self.allowToChooseNilDate || self.value != nil
+//            self.doneBarButtonItem.isEnabled = self.allowToChooseNilDate || self.value != nil
         }
     }
+    private var onSelectedDone: (() -> ())?
 
     /**
      Shortcuts array
@@ -271,6 +280,10 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
             self.selectValue(value, in: self.calendarView)
             self.calendarView.scrollToHeaderForDate(date.fromDate)
         }
+        
+        shortcutContainerView.onSelectDone = {
+            self.done()
+        }
     }
 
     /**
@@ -298,8 +311,8 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
     private func configureUI() {
         self.view.backgroundColor = self.appearance.backgroundColor
         self.navigationItem.largeTitleDisplayMode = .never
-        self.navigationItem.leftBarButtonItem = self.cancelBarButtonItem
-        self.navigationItem.rightBarButtonItem = self.doneBarButtonItem
+//        self.navigationItem.leftBarButtonItem = self.cancelBarButtonItem
+//        self.navigationItem.rightBarButtonItem = self.doneBarButtonItem
     }
 
     private func configureSubviews() {
@@ -312,6 +325,7 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
         self.view.addSubview(self.currentValueView)
         self.view.addSubview(self.weekView)
         self.view.addSubview(self.calendarView)
+//        self.view.addSubview(self.emptyView)
         if !self.shortcuts.isEmpty {
             self.view.addSubview(self.shortcutContainerView)
         }
@@ -417,6 +431,7 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
 
     @objc
     private func done() {
+        self.onSelectedDone?()
         self.doneHandler?(self.value)
         self.cancel()
     }

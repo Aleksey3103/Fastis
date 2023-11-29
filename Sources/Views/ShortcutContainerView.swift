@@ -30,11 +30,12 @@ final class ShortcutContainerView<Value: FastisValue>: UIView {
 
     // MARK: - Variables
 
-    private let itemConfig: FastisConfig.ShortcutItemView
+    private var itemConfig: FastisConfig.ShortcutItemView
     private let config: FastisConfig.ShortcutContainerView
     internal var shortcuts: [FastisShortcut<Value>]
     internal var onSelect: ((FastisShortcut<Value>) -> Void)?
-
+    internal var onSelectDone: (() -> Void)?
+    
     internal var selectedShortcut: FastisShortcut<Value>? {
         didSet {
             var indexOfSelectedShortcut: Int?
@@ -67,7 +68,10 @@ final class ShortcutContainerView<Value: FastisValue>: UIView {
     // MARK: - Configuration
 
     func configureUI() {
-        self.backgroundColor = self.config.backgroundColor
+        self.backgroundColor = .clear
+        self.itemConfig.backgroundColor = UIColor(red: 7/255, green: 144/255, blue: 107/255, alpha: 1.0)
+        self.itemConfig.font = UIFont(name: "Montserrat-Bold", size: 17) ?? UIFont()
+        //self.config.backgroundColor
     }
 
     func configureSubviews() {
@@ -79,7 +83,7 @@ final class ShortcutContainerView<Value: FastisValue>: UIView {
             itemView.name = item.name
             itemView.isSelected = item == self.selectedShortcut
             itemView.tapHandler = { [weak self] in
-                self?.onSelect?(item)
+                self?.onSelectDone?()
             }
             self.stackView.addArrangedSubview(itemView)
         }
@@ -127,7 +131,7 @@ public extension FastisConfig {
 
          Default value — `UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)`
          */
-        public var insets = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
+        public var insets = UIEdgeInsets(top: 50, left: 16, bottom: 50, right: 16)
 
     }
 }

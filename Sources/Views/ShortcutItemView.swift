@@ -28,8 +28,9 @@ final class ShortcutItemView: UIView {
 
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = self.config.font
-        label.textColor = self.config.textColor
+        label.font = UIFont(name: "Montserrat-Bold", size: 17)
+        //self.config.font
+        label.textColor = .white
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -83,6 +84,8 @@ final class ShortcutItemView: UIView {
     private func configureSubviews() {
         self.container.containerView.addSubview(self.nameLabel)
         self.addSubview(self.container)
+        container.containerView.layer.cornerRadius = 26
+
     }
 
     private func configureConstraints() {
@@ -96,7 +99,8 @@ final class ShortcutItemView: UIView {
             self.container.leftAnchor.constraint(equalTo: self.leftAnchor),
             self.container.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.container.topAnchor.constraint(equalTo: self.topAnchor),
-            self.container.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            self.container.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            self.container.heightAnchor.constraint(equalToConstant: 56),
         ])
     }
 
@@ -118,7 +122,7 @@ public extension FastisConfig {
 
          Default value — `6pt`
          */
-        public var cornerRadius: CGFloat = 6
+        public var cornerRadius: CGFloat = 26
 
         /**
          Animation on touch
