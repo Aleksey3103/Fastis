@@ -353,8 +353,7 @@ public extension FastisConfig {
 
          Default value — `.systemBlue`
          */
-        public var selectedBackgroundColor: UIColor = .systemBlue
-
+        public var selectedBackgroundColor: UIColor = UIColor(red: 7/255, green: 144/255, blue: 107/255, alpha: 1.0)
         /**
          Color of date label in cell when date is selected
 
@@ -374,7 +373,8 @@ public extension FastisConfig {
 
          Default value — `.systemBlue.withAlphaComponent(0.2)`
          */
-        public var onRangeBackgroundColor: UIColor = .systemBlue.withAlphaComponent(0.2)
+        public var onRangeBackgroundColor: UIColor = UIColor(red: 0.796, green: 0.98, blue: 0.89, alpha: 1)
+            //.systemBlue.withAlphaComponent(0.2)
 
         /**
          Color of date label in cell when date is a part of selected range

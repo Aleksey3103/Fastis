@@ -36,12 +36,12 @@ class ViewController: UIViewController {
         return button
     }()
 
-    lazy var chooseSingleButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Choose single date", for: .normal)
-        button.addTarget(self, action: #selector(self.chooseSingleDate), for: .touchUpInside)
-        return button
-    }()
+//    lazy var chooseSingleButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setTitle("Choose single date", for: .normal)
+//        button.addTarget(self, action: #selector(self.chooseSingleDate), for: .touchUpInside)
+//        return button
+//    }()
 
     // MARK: - Variables
 
@@ -81,7 +81,7 @@ class ViewController: UIViewController {
         self.containerView.addArrangedSubview(self.currentDateLabel)
         self.containerView.setCustomSpacing(32, after: self.currentDateLabel)
         self.containerView.addArrangedSubview(self.chooseRangeButton)
-        self.containerView.addArrangedSubview(self.chooseSingleButton)
+//        self.containerView.addArrangedSubview(self.chooseSingleButton)
         self.view.addSubview(self.containerView)
     }
 
@@ -101,29 +101,35 @@ class ViewController: UIViewController {
     @objc
     private func chooseRange() {
         let fastisController = FastisController(mode: .range)
-        fastisController.title = "Choose range"
+        fastisController.title = ""
         fastisController.initialValue = self.currentValue as? FastisRange
-        fastisController.minimumDate = Calendar.current.date(byAdding: .month, value: -2, to: Date())
-        fastisController.maximumDate = Calendar.current.date(byAdding: .month, value: 3, to: Date())
+        fastisController.minimumDate = Calendar.current.date(byAdding: .month, value: -50, to: Date())
+        fastisController.maximumDate = Date()
         fastisController.allowToChooseNilDate = true
-        fastisController.shortcuts = [.today, .lastWeek, .lastMonth]
+        
+        fastisController.shortcuts = [.done]
         fastisController.doneHandler = { [weak self] newValue in
-            self?.currentValue = newValue
+            if newValue == nil {
+                self?.currentValue = newValue
+            } else {
+                self?.currentValue = newValue
+            }
+           
         }
         fastisController.present(above: self)
     }
 
-    @objc
-    private func chooseSingleDate() {
-        let fastisController = FastisController(mode: .single)
-        fastisController.title = "Choose date"
-        fastisController.initialValue = self.currentValue as? Date
-        fastisController.maximumDate = Date()
-        fastisController.shortcuts = [.today, .yesterday, .tomorrow]
-        fastisController.doneHandler = { [weak self] newDate in
-            self?.currentValue = newDate
-        }
-        fastisController.present(above: self)
-    }
+//    @objc
+//    private func chooseSingleDate() {
+//        let fastisController = FastisController(mode: .single)
+//        fastisController.title = "Choose date"
+//        fastisController.initialValue = self.currentValue as? Date
+//        fastisController.maximumDate = Date()
+//        fastisController.shortcuts = [.today, .yesterday, .tomorrow]
+//        fastisController.doneHandler = { [weak self] newDate in
+//            self?.currentValue = newDate
+//        }
+//        fastisController.present(above: self)
+//    }
 
 }
