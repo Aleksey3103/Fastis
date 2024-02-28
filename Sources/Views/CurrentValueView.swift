@@ -274,7 +274,7 @@ public extension FastisConfig {
          
          Default value — `"Select date range"`
          */
-        public var placeholderTextForRanges = "Select date range"
+        public var placeholderTextForRanges = "Виберiть перiод"
         
         /**
          Placeholder text in .single mode

@@ -45,8 +45,8 @@ final class ShortcutItemView: UIView {
         didSet {
             guard self.isSelected != oldValue else { return }
             UIView.animate(withDuration: 0.1) {
-                self.container.backgroundColor = self.isSelected ? self.config.selectedBackgroundColor : self.config.backgroundColor
-                self.nameLabel.textColor = self.isSelected ? self.config.textColorOnSelected : self.config.textColor
+//                self.container.backgroundColor = self.isSelected ? self.config.selectedBackgroundColor : self.config.backgroundColor
+//                self.nameLabel.textColor = self.isSelected ? self.config.textColorOnSelected : self.config.textColor
             }
         }
     }
