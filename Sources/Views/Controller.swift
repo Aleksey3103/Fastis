@@ -201,7 +201,6 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
      If you set `true` done button will be always enabled
      */
     public var allowToChooseNilDate = false
-
     /**
      The block to execute after the dismissal finishes
      */
@@ -247,6 +246,10 @@ open class FastisController<Value: FastisValue>: UIViewController, JTACMonthView
         set {
             self.privateMaximumDate = newValue?.endOfDay()
         }
+    }
+    
+    public func updateMaximumDate(for picker: Bool) {
+        currentValueView.updateMaximumDate(for: picker)
     }
 
     // MARK: - Lifecycle

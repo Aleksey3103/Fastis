@@ -104,7 +104,8 @@ class ViewController: UIViewController {
         fastisController.title = ""
         fastisController.initialValue = self.currentValue as? FastisRange
         fastisController.minimumDate = Calendar.current.date(byAdding: .month, value: -50, to: Date())
-        fastisController.maximumDate = Date()
+//        fastisController.maximumDate = Date()
+        fastisController.updateMaximumDate(for: true)
         fastisController.allowToChooseNilDate = true
         
         fastisController.shortcuts = [.done]

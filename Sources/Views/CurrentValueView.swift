@@ -42,31 +42,37 @@ final class CurrentValueView<Value: FastisValue>: UIView {
     
     //MARK: UPDATE UI
     
-    private lazy var datePickerFirst: UIDatePicker = {
-        let picker = UIDatePicker()
-        picker.addTarget(self, action: #selector(datePickerValueChangedFirst(_:)), for: .valueChanged)
-        picker.datePickerMode = .date // Adjust this to your desired mode
-        picker.maximumDate = Date()
-        picker.translatesAutoresizingMaskIntoConstraints = false
-        return picker
-    }()
+
     var fromDate = Date()
     var toDate = Date()
     var completion: ((_ value: Value?) -> ())?
     var fastisRange: Value?
+    var setMaximumDateForPicker = false
     
     
-//    @objc private func datePickerValueChangedFirst(_ sender: UIDatePicker) {
-//        fromDate = sender.date
-//        print("FromDate = \(fromDate)")
-//        updateRangeLabel()
-//    }
-    
+    public func updateMaximumDate(for picker: Bool) {
+        setMaximumDateForPicker = picker
+        updateDatePickersMaximumDate()
+    }
+
+    private func updateDatePickersMaximumDate() {
+        let maximumDate = setMaximumDateForPicker ? Date() : nil
+        datePickerFirst.maximumDate = maximumDate
+        datePickerSecond.maximumDate = maximumDate
+    }
+
+    private lazy var datePickerFirst: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.addTarget(self, action: #selector(datePickerValueChangedFirst(_:)), for: .valueChanged)
+        picker.datePickerMode = .date
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        return picker
+    }()
+
     private lazy var datePickerSecond: UIDatePicker = {
         let picker = UIDatePicker()
         picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         picker.datePickerMode = .date
-        picker.maximumDate = Date()
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
     }()
